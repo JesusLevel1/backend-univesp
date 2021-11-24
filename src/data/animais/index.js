@@ -57,8 +57,62 @@ const cadastroAnimais = async (IdDoador, data) => {
     }
 }
 
+const postComentario = async (IdAnimal, data) => {
+    try{
+        let pool = await sql.connect(config.sql);
+        const sqlQueries = await utils.loadSqlQueries('animais');
+        const postComentario = await pool.request()
+            .input('IdAnimal', IdAnimal)
+            .input('Comentario', data.Comentario)
+            .query(sqlQueries.postComentario)
+        
+        return postComentario.recordset;
+
+    }catch(error){
+        return message.error
+    }
+}
+
+const postResposta = async (IdAnimal, data) => {
+    try{
+        let pool = await sql.connect(config.sql);
+        const sqlQueries = await utils.loadSqlQueries('animais');
+        const postResposta = await pool.request()
+            .input('IdAnimal', IdAnimal)
+            .input('IdComentario', data.IdComentario)
+            .input('Resposta' , data.Resposta)
+            .query(sqlQueries.postResposta)
+        
+        return postResposta.recordset;
+
+    }catch(error){
+        return message.error
+    }
+}
+
+const getComentarios = async (IdAnimal) => {
+    try{
+
+        let pool = await sql.connect(config.sql);
+        const sqlQueries = await utils.loadSqlQueries('animais');
+        const getComentarios = await pool.request()
+            .input('IdAnimal', IdAnimal)
+            .query(sqlQueries.getComentarios)
+
+            console.log(getComentarios)
+
+        return getComentarios.recordset
+
+    }catch (error){
+        return message.error
+    }
+}
+
 module.exports = {
     cadastroAnimais,
     getAnimais,
-    getAnimal
+    getAnimal,
+    postComentario,
+    postResposta,
+    getComentarios
 }

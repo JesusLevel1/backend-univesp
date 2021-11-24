@@ -15,6 +15,8 @@ router.post('/cadastroUsuario', loginControll.cadastroUsuario)
 router.post('/cadastroAnimais', login.required, animaisControll.cadastroAnimais)
 router.get('/listAnimais', animaisControll.getAnimais) 
 router.get('/petProfile/:IdAnimal', animaisControll.getAnimal)
+router.post('/postComentario', login.required, animaisControll.postComentario)
+router.get('/getComentarios/:IdAnimal', animaisControll.getComentarios)
 
 module.exports = {
     routes: router
