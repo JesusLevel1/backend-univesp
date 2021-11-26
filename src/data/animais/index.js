@@ -19,6 +19,21 @@ const getAnimais = async (pageNumber, rowsPage) => {
     }
 }
 
+const getAnimaisDoador = async (IdUsuario) => {
+    try{
+
+        let pool = await sql.connect(config.sql);
+        const sqlQueries = await utils.loadSqlQueries('animais');
+        const getAnimaisDoador = await pool.request()
+            .input('IdDoador', sql.Int, IdUsuario)
+            .query(sqlQueries.getAnimaisDoador);
+        return getAnimaisDoador.recordset;
+
+    }catch (error){
+        return error.message;
+    }
+}
+
 const getAnimal = async (IdAnimal) => {
     try{
 
@@ -27,6 +42,7 @@ const getAnimal = async (IdAnimal) => {
         const getAnimal = await pool.request()
             .input('IdAnimal', IdAnimal)
             .query(sqlQueries.getAnimal);
+        console.log(getAnimal)
         return getAnimal.recordset;
 
     }catch(error){  
@@ -114,5 +130,6 @@ module.exports = {
     getAnimal,
     postComentario,
     postResposta,
-    getComentarios
+    getComentarios,
+    getAnimaisDoador
 }

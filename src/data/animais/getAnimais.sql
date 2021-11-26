@@ -13,6 +13,6 @@ select
     DescricaoAnimal,
     bitDoado
 from T_Animais 
-ORDER BY NEWID()
+ORDER BY IdAnimal
 OFFSET ((@pageNumber - 1) * @rowsPage) ROWS
 FETCH NEXT @rowsPage ROWS ONLY
