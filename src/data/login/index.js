@@ -3,6 +3,7 @@ const utils = require('../utils');
 const config = require('../../config')
 const sql = require('mssql');
 
+
 const getByLogin = async (data) => {
     try{
         let pool = await sql.connect(config.sql);
@@ -29,6 +30,7 @@ const cadastroUsuario = async (data) => {
             .input('Senha',  data.Senha)
             .input('Numero',  data.Numero)
             .input('Bairro',  data.Bairro)
+            .input('imagem', data.imagem)
             .input('Cidade',  data.Cidade)
             .input('Complemento', data.Complemento)
             .query(sqlQueries.cadastraUsuario);

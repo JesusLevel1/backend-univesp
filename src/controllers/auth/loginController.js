@@ -79,6 +79,9 @@ const cadastroUsuario = async (req,res,next) => {
         return error.message
     }
 }
+        
+
+
 
 module.exports = {
     postLogin,

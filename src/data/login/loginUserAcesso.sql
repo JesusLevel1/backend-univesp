@@ -7,7 +7,8 @@ SELECT
     Numero,
     Bairro,
     Cidade,
-    Complemento
+    Complemento,
+    imagem,
     BitInstit,
     BitAtivo
 FROM T_Usuario

@@ -8,7 +8,8 @@ INSERT INTO T_Usuario
     Numero, 
     Bairro, 
     Cidade, 
-    Complemento
+    Complemento,
+    imagem
 )
 VALUES
 (
@@ -20,7 +21,8 @@ VALUES
     @Numero, 
     @Bairro, 
     @Cidade, 
-    @Complemento
+    @Complemento,
+    @imagem
 )
 
 SELECT SCOPE_IDENTITY() AS IdUsuario
