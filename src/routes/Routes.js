@@ -4,6 +4,7 @@ const express = require ('express');
 const login = require('../middleware/login');
 const router = express.Router();
 
+const uploadimg = require('../middleware/uploadFoto');
 const loginControll = require ('../controllers/auth/loginController')
 const animaisControll = require ('../controllers/animais/animaisController')
 const ProfileControll = require ('../controllers/profile/profileController')
@@ -21,6 +22,8 @@ router.get('/getComentarios/:IdAnimal', animaisControll.getComentarios)
 
 //  Rotas do usuario
 router.get('/getUser/:IdUsuario', ProfileControll.getProfile)
+
+router.post('/upload', uploadimg.uploadImg.single('file'), animaisControll.uploadImage);
 
 
 module.exports = {

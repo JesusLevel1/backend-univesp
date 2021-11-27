@@ -191,11 +191,33 @@ const cadastroAnimais = async (req,res,next) => {
     }
 }
 
+const uploadImage = async (req, res, next) => {
+    try {
+        const file = req.file
+
+        if (!file) {
+            return res.status(400).send({ 
+                message: 'Erro ao fazer upload da imagem'
+            })
+        } else {
+            return res.status(200).send({
+                message: 'Imagem enviada com sucesso',
+                file: file
+            });
+        }
+
+    } catch (error) {
+        return res.status(500).send({ error: error.message })
+    }
+}
+
+
 
 module.exports = {
     cadastroAnimais,
     getAnimais,
     getAnimal,
     postComentario,
-    getComentarios
+    getComentarios,
+    uploadImage
 }
