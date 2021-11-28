@@ -8,12 +8,17 @@ const getProfile = async (req, res, next) => {
     try {
 
         const IdUsuario = req.params.IdUsuario
-        const getAnimaisDoador = await animaisData.getAnimaisDoador(IdUsuario)
+
         const getProfile = await profileData.getPerfil(IdUsuario)
+
+        const IdDoador = getProfile[0].IdDoador
+        const getAnimaisDoador = await animaisData.getAnimaisDoador(IdDoador)
+
 
         return res.status(200).send({
             data: getProfile.map(({
                 IdUsuario, 
+                IdDoador,
                 Nome, 
                 Celular,
                 FotoUser,
@@ -23,6 +28,7 @@ const getProfile = async (req, res, next) => {
             })  =>{
                 return {
                     IdUsuario, 
+                    IdDoador,
                     Nome, 
                     Celular,
                     FotoUser,

@@ -19,13 +19,13 @@ const getAnimais = async (pageNumber, rowsPage) => {
     }
 }
 
-const getAnimaisDoador = async (IdUsuario) => {
+const getAnimaisDoador = async (IdDoador) => {
     try{
 
         let pool = await sql.connect(config.sql);
         const sqlQueries = await utils.loadSqlQueries('animais');
         const getAnimaisDoador = await pool.request()
-            .input('IdDoador', sql.Int, IdUsuario)
+            .input('IdDoador', sql.Int, IdDoador)
             .query(sqlQueries.getAnimaisDoador);
         return getAnimaisDoador.recordset;
 
@@ -42,7 +42,6 @@ const getAnimal = async (IdAnimal) => {
         const getAnimal = await pool.request()
             .input('IdAnimal', IdAnimal)
             .query(sqlQueries.getAnimal);
-        console.log(getAnimal)
         return getAnimal.recordset;
 
     }catch(error){  
@@ -50,7 +49,7 @@ const getAnimal = async (IdAnimal) => {
     }
 }
 
-const cadastroAnimais = async (IdDoador, data) => {
+const cadastroAnimais = async (IdDoador, data, img) => {
     try{
         let pool = await sql.connect(config.sql);
         const sqlQueries = await utils.loadSqlQueries('animais');
@@ -60,7 +59,7 @@ const cadastroAnimais = async (IdDoador, data) => {
             .input('Sexo', data.Sexo)
             .input('Idade', data.Idade)
             .input('Porte',  data.Porte)
-            .input('ImagemAnimal',  data.ImagemAnimal)
+            .input('ImagemAnimal',  img)
             .input('IdEspecie',  data.IdEspecie)
             .input('BitCastrado',  data.BitCastrado)
             .input('BitVacinado', data.BitVacinado)
@@ -114,9 +113,6 @@ const getComentarios = async (IdAnimal) => {
         const getComentarios = await pool.request()
             .input('IdAnimal', IdAnimal)
             .query(sqlQueries.getComentarios)
-
-            console.log(getComentarios)
-
         return getComentarios.recordset
 
     }catch (error){

@@ -14,7 +14,7 @@ router.post('/login', loginControll.postLogin)
 router.post('/cadastroUsuario', loginControll.cadastroUsuario)
 
 /* ROTA DE CADASTRO DE ANIMAIS */
-router.post('/cadastroAnimais', login.required, animaisControll.cadastroAnimais)
+router.post('/cadastroAnimais', login.required, uploadimg.uploadImg.single('file'), animaisControll.cadastroAnimais)
 router.get('/listAnimais', animaisControll.getAnimais) 
 router.get('/petProfile/:IdAnimal', animaisControll.getAnimal)
 router.post('/postComentario', login.required, animaisControll.postComentario)

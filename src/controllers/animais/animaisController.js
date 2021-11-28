@@ -4,13 +4,13 @@ const crypto = require('crypto');
 const { response } = require('express');
 const jwt = require('jsonwebtoken');
 const animaisData = require('../../data/animais');
+const fs = require("fs");
 
 
 const getAnimais = async (req, res, next) => {
     try{
         const pageNumber = req.query.pageNumber || 1
         const rowsPage = req.query.rowsPage || 9
-        console.log(pageNumber)
         const animais = await animaisData.getAnimais(pageNumber, rowsPage)
 
         if (animais.length < 1 || animais.length === 0){
@@ -70,7 +70,7 @@ const postComentario = async (req, res, next) => {
         //Decodificando o Token para capturar o ID do usuario
         const decode = jwt.verify(token, process.env.JWT_KEY);
         // Armazenando o ID do usuario
-        const IdDoador = decode.IdUsuario
+        const IdDoador = data.IdDoador
 
         if (!data.Resposta){
             if (!IdAnimal || !data.Comentario){
@@ -86,9 +86,8 @@ const postComentario = async (req, res, next) => {
         }
         else{
             const animal = await animaisData.getAnimal(IdAnimal)
-            console.log(animal)
             if(animal[0].IdDoador === IdDoador){
-                const s = await animaisData.postResposta(IdAnimal, data)
+                await animaisData.postResposta(IdAnimal, data)
                 return res.status(200).send({
                     message: 'Cadastrado com sucesso',
                 });
@@ -139,6 +138,7 @@ const getAnimal = async (req, res, next ) => {
             data: {
                 Animal: {
                     IdAnimal: getAnimal[0].IdAnimal,
+                    IdDoador: getAnimal[0].IdDoador,
                     nomeAnimal: getAnimal[0].NomeAnimal,
                     Sexo: getAnimal[0].Sexo,
                     idade: getAnimal[0].Idade,
@@ -168,7 +168,7 @@ const cadastroAnimais = async (req,res,next) => {
     try{
         // recebendo parametros que o front manda
         const data = req.body
-
+        const img = req.file.path;
         // Recebendo do bearer
         const token = req.headers.authorization.split(' ')[1];
         //Decodificando o Token para capturar o ID do usuario
@@ -176,11 +176,25 @@ const cadastroAnimais = async (req,res,next) => {
         // Armazenando o ID do usuario
         const IdDoador = decode.IdUsuario
 
+       // console.log(req.body)
+       const remotePath = req.file.path
+
         if (!data.NomeAnimal||!data.Sexo||!data.Porte||!data.IdEspecie){
-            return res.status(400).send({message: 'Preencha todos os paramêtros: NomeAnimal, Sexo, Porte, Senha, IdEspecie'})
+            fs.unlink(remotePath, (err) => {
+                if (err) {
+                    return res.status(400).send({message: 'Falha ao tentar deletar o post do arquivo local: ' + err})
+                } else {
+                    return res.status(400).send({message: 'Post deletado com sucesso no arquivo local' + err})
+                }
+            });
+            return res.status(400).send({message: 'Preencha todos os paramêtros: NomeAnimal, Sexo, Porte, IdEspecie'})
+        }
+    
+        if (img.ImagemAnimal){
+            uploadImage(img.ImagemAnimal)
         }
         
-        await animaisData.cadastroAnimais(IdDoador, data)
+        await animaisData.cadastroAnimais(IdDoador, data, img)
         
         return res.status(200).send({
             message: 'Cadastrado com sucesso',
@@ -194,6 +208,8 @@ const cadastroAnimais = async (req,res,next) => {
 const uploadImage = async (req, res, next) => {
     try {
         const file = req.file
+
+        console.log(file)
 
         if (!file) {
             return res.status(400).send({ 
